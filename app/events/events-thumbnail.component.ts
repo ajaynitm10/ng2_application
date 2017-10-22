@@ -1,9 +1,20 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import { IEvent } from './shared/event.model'
+import { TranslateService } from '../translate/translate.service';
 
 @Component({
     selector:'events-thumbnail',
     template : `
+        <h4>Translate: Hello World</h4>
+        <h6>{{'hello world' | translate }}
+        <h6>{{ checkingVal | translate }}
+        <div class="btn-group">
+            <button *ngFor="let lang of supportedLangs"
+            (click)="selectLang(lang.value)"
+            class="btn btn-default" [class.btn-primary]="isCurrentLang(lang.value)">
+            {{ lang.display }}
+            </button>
+        </div>
         <div [routerLink]="['/events', event.id]" class="well hoverwell thumbnail">
             <h2>{{event.name | uppercase}}</h2>
             <div>Date: {{event?.date | date:'shortDate'}}</div>
@@ -33,6 +44,40 @@ import { IEvent } from './shared/event.model'
 
 export class EventsThumbnailComponent{
    @Input() event: IEvent
+
+    public translatedText: string;
+    public supportedLanguages: any[];
+    public supportedLangs = [];
+    checkingVal: string;
+    constructor(private _translate: TranslateService) { }
+
+    ngOnInit() {
+      // standing data
+      this.supportedLangs = [
+        { display: 'English', value: 'en' },
+        { display: 'Español', value: 'es' },
+        { display: '华语', value: 'zh' },
+      ];
+      
+      this.checkingVal = 'hello ng2';
+      this.selectLang('es');
+      
+        
+    }
+    
+    isCurrentLang(lang: string) {
+      return lang === this._translate.currentLang;
+    }
+    
+    selectLang(lang: string) {
+      // set default;
+      this._translate.use(lang);
+      this.refreshText();
+    }
+    
+    refreshText() {
+      this.translatedText = this._translate.instant('hello world');
+    }
 
    getStartTimeClass(){
        const isEarlySatrt = this.event && this.event.time === '8:00 am'
