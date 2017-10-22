@@ -2,6 +2,7 @@ import { NgModule} from "@angular/core"
 import { BrowserModule } from '@angular/platform-browser'
 import { RouterModule } from '@angular/router'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { TRANSLATION_PROVIDERS, TranslatePipe, TranslateService }   from './translate/index';
 
 import {
     EventsListComponent,
@@ -13,10 +14,9 @@ import {
     EventListResolver,
     CreateSessionComponent,
     SessionListComponent,
-    UpvoteComponent,
-    VoterService,
-    LocationValidator,
-    DurationPipe
+    DurationPipe,
+	OfficeProjectComponent,
+	MyTableRowComponent
 } from './events/index'
 import { EventsAppComponent } from './events-app.component'
 import { NavBarComponent } from './nav/navbar.component'
@@ -53,11 +53,12 @@ declare let jQuery: Object;
         SessionListComponent,
         CollapsibleWellComponent,
         SimpleModalComponent,
-        UpvoteComponent,
         ModalTriggerDirective,
-        LocationValidator,
-        DurationPipe],
-    providers: [ 
+        DurationPipe,
+		OfficeProjectComponent,
+		MyTableRowComponent,
+        TranslatePipe],
+    providers: [
         EventService,
         {provide: TOASTR_TOKEN, useValue: toastr },
         {provide: jQuery_Token, useValue: jQuery },
@@ -68,8 +69,9 @@ declare let jQuery: Object;
             useValue: checkDirtyState
         },
         EventListResolver,
-        VoterService,
-        AuthService],
+        AuthService, 
+        TRANSLATION_PROVIDERS,
+        TranslateService],
     bootstrap: [EventsAppComponent]
 })
 export class AppModule {}
